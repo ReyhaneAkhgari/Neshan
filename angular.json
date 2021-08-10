@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "821fff9b-8df3-461e-bc09-b2ddd7c97659"
+  },
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "anne-of-green-gables": {
+      "projectType": "library",
+      "root": "projects/anne-of-green-gables",
+      "sourceRoot": "projects/anne-of-green-gables/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/anne-of-green-gables/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/anne-of-green-gables/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/anne-of-green-gables/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/anne-of-green-gables/src/test.ts",
+            "tsConfig": "projects/anne-of-green-gables/tsconfig.spec.json",
+            "karmaConfig": "projects/anne-of-green-gables/karma.conf.js"
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "anne-of-green-gables"
+}
