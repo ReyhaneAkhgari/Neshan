@@ -1,6 +1,6 @@
 {
   "name": "anne-of-green-gables",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -19,7 +19,6 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@types/leaflet": "1.4.0",
-    "anne-of-green-gables": "file:dist/anne-of-green-gables",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
