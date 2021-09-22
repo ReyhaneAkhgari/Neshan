@@ -1,24 +1,42 @@
-# MyLibSecond
+# Angular component for 🍃 Neshan Leaflet map.
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.0.
+### Developed by Rayan NiK team
 
-## Code scaffolding
+## About The Project
 
-Run `ng generate component component-name --project anne-of-green-gables` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project anne-of-green-gables`.
-> Note: Don't forget to add `--project anne-of-green-gables` or else it will be added to the default project in your `angular.json` file. 
+This project implements Neshan map as an angular library ,it has used Leaflet to implement the map.
+This library is written for the needs of our company. If you have any questions or suggestions to improve it ,create an issue.
 
-## Build
+## Installation
 
-Run `ng build anne-of-green-gables` to build the project. The build artifacts will be stored in the `dist/` directory.
+npm:
 
-## Publishing
+## Features
+### Use Laflet Maps API 
 
-After building your library with `ng build anne-of-green-gables`, go to the dist folder `cd dist/anne-of-green-gables` and run `npm publish`.
+You can access to Leaflet Maps `L` , `map`  objects by using `onInit`.
 
-## Running unit tests
-
-Run `ng test anne-of-green-gables` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```javascript
+ ngOnInit(): void {
+    this.initMap();
+  }
+ initMap() {
+    this._map = new leafletNeshan.Map('map', {
+      key: this.key,
+      center: this.center,
+      zoom: this.zoom,
+      poi: this.poi,
+      maptype: this.mapType,
+      traffic: this.traffic,
+    });
+    leafletNeshan.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      maxZoom: 20
+    }).addTo(this._map);
+  }
+}
+```
 
 ## Further help
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+[Example here](https://github.com/ReyhaneAkhgari/Neshanleafletangular)
