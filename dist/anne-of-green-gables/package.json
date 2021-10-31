@@ -1,0 +1,18 @@
+{
+  "name": "anne-of-green-gables",
+  "version": "1.2.1",
+  "peerDependencies": {
+    "@angular/common": "^12.0.0",
+    "@angular/core": "^12.0.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "main": "bundles/anne-of-green-gables.umd.js",
+  "module": "fesm2015/anne-of-green-gables.js",
+  "es2015": "fesm2015/anne-of-green-gables.js",
+  "esm2015": "esm2015/anne-of-green-gables.js",
+  "fesm2015": "fesm2015/anne-of-green-gables.js",
+  "typings": "anne-of-green-gables.d.ts",
+  "sideEffects": false
+}

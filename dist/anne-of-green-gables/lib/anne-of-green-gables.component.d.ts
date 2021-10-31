@@ -1,0 +1,53 @@
+import { OnInit, EventEmitter } from '@angular/core';
+import * as i0 from "@angular/core";
+export declare class AnneOfGreenGablesComponent implements OnInit {
+    key: string;
+    center: Array<number>;
+    zoom: number;
+    mapType: string;
+    poi: boolean;
+    traffic: boolean;
+    lastCenter: EventEmitter<Point2D>;
+    counterMove: EventEmitter<number>;
+    selectedMarkerlng: EventEmitter<Point2D>;
+    _map: any;
+    marker: any;
+    layerGroup: any;
+    circleMarker: any;
+    circleLayerGroup: any;
+    private layerTemp;
+    activeMarker: Array<Point2D>;
+    markermarker: any;
+    markersIndex: any;
+    Layers: any;
+    removeLayers: any;
+    Lat: any;
+    lng: any;
+    currentLocation: Array<number>;
+    movecenter: Array<number>;
+    x: any;
+    y: any;
+    arr: Array<number>;
+    counter: number;
+    selectedIcon: any;
+    unselectedIcon: any;
+    constructor();
+    ngOnInit(): void;
+    initMap(): void;
+    private _emitLastCenter;
+    concatMarkers(markers: Array<Point2D>): void;
+    removeMarkers(): void;
+    onLocationFound(e: any): void;
+    moveToCurrentLocation(): void;
+    selectMarker(item: Point2D): void;
+    unSelectMarker(item: Point2D): void;
+    static ɵfac: i0.ɵɵFactoryDeclaration<AnneOfGreenGablesComponent, never>;
+    static ɵcmp: i0.ɵɵComponentDeclaration<AnneOfGreenGablesComponent, "lib-anne-of-green-gables", never, { "key": "key"; "center": "center"; "zoom": "zoom"; "mapType": "mapType"; "poi": "poi"; "traffic": "traffic"; }, { "lastCenter": "lastCenter"; "counterMove": "counterMove"; "selectedMarkerlng": "selectedMarkerlng"; }, never, never>;
+}
+export declare class Point2D {
+    lat: number;
+    lng: number;
+    on: any;
+    setIcon: any;
+    constructor();
+}
