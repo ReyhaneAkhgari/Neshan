@@ -23,26 +23,22 @@ class AnneOfGreenGablesComponent {
         this.poi = true;
         this.traffic = false;
         this.lastCenter = new EventEmitter();
-        this.counterMove = new EventEmitter();
-        this.selectedMarkerlng = new EventEmitter();
-        this.activeMarker = new Array();
-        this.currentLocation = [];
-        this.arr = [];
-        this.counter = 0;
-        this.selectedIcon = leafletNeshan.icon({
-            iconUrl: '../src/assets/icon/marker-selected.png',
+        this.locationFound = new EventEmitter();
+        this.selectedMarkerIndex = new EventEmitter();
+        this._currentLocation = new Point2D();
+        this._selectedIcon = leafletNeshan.icon({
+            iconUrl: 'src/assets/icon/marker-selected.png',
             iconSize: [35, 40]
         });
-        this.unselectedIcon = leafletNeshan.icon({
-            iconUrl: '../src/assets/icon/marker-not-selected.png',
+        this._unselectedIcon = leafletNeshan.icon({
+            iconUrl: 'src/assets/icon/marker-not-selected.png',
             iconSize: [35, 40]
         });
     }
     ngOnInit() {
         this.initMap();
-        this._emitLastCenter();
-        this.circleLayerGroup = leafletNeshan.layerGroup().addTo(this._map);
-        this.layerGroup = leafletNeshan.layerGroup().addTo(this._map);
+        this._emitLastCenterOnMoveEnd();
+        this._layerGroup = leafletNeshan.layerGroup().addTo(this._map);
     }
     initMap() {
         this._map = new leafletNeshan.Map('map', {
@@ -59,54 +55,59 @@ class AnneOfGreenGablesComponent {
         }).addTo(this._map);
         this._map.locate({ setView: true, maxZoom: 16 });
         this._map.on('locationfound', (e) => {
-            this.layerTemp = leafletNeshan.circle(e.latlng, e.accuracy - 50).addTo(e.target);
-            this.circleLayerGroup = leafletNeshan.layerGroup().addLayer(this.layerTemp).addTo(e.target);
-            this.currentLocation = e.latlng;
+            const layerTemp = leafletNeshan.circle(e.latlng, e.accuracy).addTo(e.target);
+            this._circleLayerGroup = leafletNeshan.layerGroup().addLayer(layerTemp).addTo(e.target);
+            this._currentLocation.setFromLatLng(e.latlng);
+            this.locationFound.emit(this._currentLocation);
         });
     }
-    _emitLastCenter() {
+    _emitLastCenterOnMoveEnd() {
         this._map.on('moveend', (_ev) => {
             this.lastCenter.emit(this._map.getCenter());
-            this.counter++;
-            this.counterMove.emit(this.counter);
         });
     }
     concatMarkers(markers) {
         markers.forEach((item) => {
-            leafletNeshan.marker([item.lat, item.lng], { icon: this.unselectedIcon }).on('click', (ev) => {
-                this.Layers = this.layerGroup.getLayers();
-                this.Layers.forEach((element) => { if (element instanceof leafletNeshan.Marker) {
-                    element.setIcon(this.unselectedIcon);
-                } });
-                ev.target.setIcon(this.selectedIcon);
-            }).addTo(this.layerGroup);
+            leafletNeshan.marker([item.lat, item.lng], { icon: this._unselectedIcon }).on('click', (ev) => {
+                const markerLayers = this._layerGroup.getLayers();
+                markerLayers.forEach((element, index) => {
+                    if (element instanceof leafletNeshan.Marker) {
+                        element.setIcon(this._unselectedIcon);
+                        if (element._latlng.lat == item.lat && element._latlng.lng == item.lng)
+                            this.selectedMarkerIndex.emit(index);
+                    }
+                });
+                ev.target.setIcon(this._selectedIcon);
+            }).addTo(this._layerGroup);
         });
     }
     removeMarkers() {
-        this.layerGroup.clearLayers();
-    }
-    onLocationFound(e) {
-        const layerTemp = leafletNeshan.circle(e.latlng, e.accuracy - 50).addTo(e.target);
-        this.layerGroup = leafletNeshan.layerGroup().addLayer(layerTemp).addTo(e.target);
-        this.currentLocation = e.latlng;
+        this._layerGroup.clearLayers();
     }
     moveToCurrentLocation() {
-        this._map.setView(this.currentLocation);
+        this._map.setView(this._currentLocation);
     }
     selectMarker(item) {
-        this.layerGroup.getLayers().find((x) => x.lat === item.lat && x.lng === item.lng).setIcon(this.selectedIcon);
+        this._layerGroup.getLayers().forEach((element) => {
+            if (element instanceof leafletNeshan.Marker && element._latlng.lat === item.lat && element._latlng.lng === item.lng) {
+                element.setIcon(this._selectedIcon);
+            }
+        });
     }
     unSelectMarker(item) {
-        this.layerGroup.getLayers().find((x) => x.lat === item.lat && x.lng === item.lng).setIcon(this.unselectedIcon);
+        this._layerGroup.getLayers().forEach((element) => {
+            if (element instanceof leafletNeshan.Marker && element._latlng.lat === item.lat && element._latlng.lng === item.lng) {
+                element.setIcon(this._unselectedIcon);
+            }
+        });
     }
 }
 AnneOfGreenGablesComponent.ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "12.2.0", ngImport: i0, type: AnneOfGreenGablesComponent, deps: [], target: i0.ɵɵFactoryTarget.Component });
-AnneOfGreenGablesComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.0", type: AnneOfGreenGablesComponent, selector: "lib-anne-of-green-gables", inputs: { key: "key", center: "center", zoom: "zoom", mapType: "mapType", poi: "poi", traffic: "traffic" }, outputs: { lastCenter: "lastCenter", counterMove: "counterMove", selectedMarkerlng: "selectedMarkerlng" }, ngImport: i0, template: `
-  
+AnneOfGreenGablesComponent.ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.0", type: AnneOfGreenGablesComponent, selector: "lib-anne-of-green-gables", inputs: { key: "key", center: "center", zoom: "zoom", mapType: "mapType", poi: "poi", traffic: "traffic" }, outputs: { lastCenter: "lastCenter", locationFound: "locationFound", selectedMarkerIndex: "selectedMarkerIndex" }, ngImport: i0, template: `  
   <div id='map' style="width: 800px; height: 500px; background: #eee; border: 2px solid #aaa;">  
     <div class="leafleat-top leaflet-left" style="position:absolute;width:34px;height:34px;z-index:20000;top:75px;left:10px;">
       <button style="height:34px;width:34px;" (click)="moveToCurrentLocation()">
-      <img src="../src/assets/icon/my-location.png" style="position: relative;top: -3px;right: 5px;">
+      <img src="/assets/icon/my-location.png" style="position: relative;top: -3px;right: 5px;">
     </button>
     <div class="leafleat-top leaflet-right" style="position:absolute;width:34px;height:34px;z-index:20000;">
       <button style="height:34px;width:34px;" (click)="removeMarkers()">rm</button>
@@ -117,12 +118,11 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.0", ngImpor
             type: Component,
             args: [{
                     selector: 'lib-anne-of-green-gables',
-                    template: `
-  
+                    template: `  
   <div id='map' style="width: 800px; height: 500px; background: #eee; border: 2px solid #aaa;">  
     <div class="leafleat-top leaflet-left" style="position:absolute;width:34px;height:34px;z-index:20000;top:75px;left:10px;">
       <button style="height:34px;width:34px;" (click)="moveToCurrentLocation()">
-      <img src="../src/assets/icon/my-location.png" style="position: relative;top: -3px;right: 5px;">
+      <img src="/assets/icon/my-location.png" style="position: relative;top: -3px;right: 5px;">
     </button>
     <div class="leafleat-top leaflet-right" style="position:absolute;width:34px;height:34px;z-index:20000;">
       <button style="height:34px;width:34px;" (click)="removeMarkers()">rm</button>
@@ -148,9 +148,9 @@ i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.0", ngImpor
                 type: Input
             }], lastCenter: [{
                 type: Output
-            }], counterMove: [{
+            }], locationFound: [{
                 type: Output
-            }], selectedMarkerlng: [{
+            }], selectedMarkerIndex: [{
                 type: Output
             }] } });
 class Point2D {
@@ -159,6 +159,10 @@ class Point2D {
         this.lng = 0;
         this.lat = 0;
         this.lng = 0;
+    }
+    setFromLatLng(latLng) {
+        this.lat = latLng.lat;
+        this.lng = latLng.lng;
     }
 }
 
