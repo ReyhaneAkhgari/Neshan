@@ -1,6 +1,6 @@
 {
   "name": "anne-of-green-gables",
-  "version": "1.1.1",
+  "version": "1.6.7",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
