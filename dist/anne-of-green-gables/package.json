@@ -1,6 +1,6 @@
 {
   "name": "anne-of-green-gables",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "peerDependencies": {
     "@angular/common": "^12.0.0",
     "@angular/core": "^12.0.0"

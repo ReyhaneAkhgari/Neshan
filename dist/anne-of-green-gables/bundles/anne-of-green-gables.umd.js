@@ -79,8 +79,8 @@
                 maptype: this.mapType,
                 traffic: this.traffic,
             });
-            leafletNeshan.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+            leafletNeshan.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors',
                 maxZoom: this.zoom
             }).addTo(this._map);
             this._map.locate({ setView: this.setView, maxZoom: this.zoom });
